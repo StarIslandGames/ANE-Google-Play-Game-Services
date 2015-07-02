@@ -17,7 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////////////-->
 
 <extension xmlns="http://ns.adobe.com/air/extension/15.0">
-    <id>com.freshplanet.AirGooglePlayGamesService</id>
+    <id>com.freshplanet.AirGooglePlayGamesServices</id>
     <versionNumber>1.0</versionNumber>
     <platforms>
         <platform name="iPhone-ARM">
@@ -26,7 +26,7 @@
 
         <platform name="Android-ARM"> 
             <applicationDeployment> 
-                <nativeLibrary>libAirGooglePlayGameServices.jar</nativeLibrary> 
+                <nativeLibrary>libAirGooglePlayGamesServices.jar</nativeLibrary>
                 <initializer>com.freshplanet.googleplaygames.Extension</initializer> 
                 <finalizer>com.freshplanet.googleplaygames.Extension</finalizer> 
             </applicationDeployment>

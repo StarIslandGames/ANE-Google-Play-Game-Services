@@ -134,7 +134,7 @@ package com.freshplanet.ane.AirGooglePlayGames
 		// 																						 //
 		// --------------------------------------------------------------------------------------//
 		
-		private static const EXTENSION_ID : String = "com.freshplanet.AirGooglePlayGamesService";
+		private static const EXTENSION_ID : String = "com.freshplanet.AirGooglePlayGamesServices";
 		
 		private static var _instance : AirGooglePlayGames;
 		
