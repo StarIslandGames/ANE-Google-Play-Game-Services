@@ -9,6 +9,8 @@
 
     <!-- Android -->
     <target name="android" description="Build Android Library">
+        <property name="google_play_services_lib" value="${android.sdk}/../../extras/google/google_play_services/libproject/google-play-services_lib" />
+
         <delete dir="../android/temp"/>
         <mkdir dir="../android/temp/classes"/>
 
@@ -18,24 +20,18 @@
             <classpath>
                 <pathelement location="${android.sdk}/android.jar"/>
                 <pathelement location="${flex.sdk}/lib/android/FlashRuntimeExtensions.jar"/>
-                <!--<pathelement location="../android/AirMoPub/libs/android-support-v4.jar"/>-->
-                <pathelement location="../android/google-play-services_lib/libs/google-play-services.jar"/>
+                <pathelement location="${google_play_services_lib}/libs/google-play-services.jar"/>
             </classpath>
         </javac>
-        
-        <!-- <mkdir dir="../android/temp/zip"/>
-        <unzip src="../android/google-play-services_lib/libs/google-play-services.jar" dest="../android/temp/zip" />
-        <copydir src="../android/temp/zip/com" dest="../android/temp/classes/com"/>
 
-        <copy todir="../temp/android/res/">
-            <fileset dir="../android/google-play-services_lib/bin/res"/>
-        </copy> -->
-        
-        <!-- <copy todir="../temp/android/res/values/">
-            <fileset dir="${gplayservices.libs}/res/values"/>
-        </copy> -->
-        
-        
+        <copy todir="../temp/android/google-play-services-res/">
+            <fileset dir="${google_play_services_lib}/res"/>
+        </copy>
+
+        <copy todir="../temp/android">
+            <fileset file="${google_play_services_lib}/libs/google-play-services.jar" />
+        </copy>
+
         <mkdir dir="../temp/android/"/>
         <jar basedir="../android/temp/classes" destfile="../temp/android/lib${name}.jar"/>
         <delete dir="../android/temp"/>
@@ -79,7 +75,7 @@
             <arg value="../build/extension.xml"/>
             <arg line="-swc swc/${name}.swc"/>
             <arg line="-platform iPhone-ARM -C ios/ ."/>
-            <arg line="-platform Android-ARM -C android/ ."/>
+            <arg line="-platform Android-ARM -platformoptions ../build/platform-android.xml -C android/ ."/>
             <arg line="-platform default -C default/ ."/>
         </java>
 
