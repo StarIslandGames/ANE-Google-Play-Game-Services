@@ -15,8 +15,14 @@ public class AirGooglePlayStartAtLaunch implements FREFunction {
 		Extension.context.logEvent("AirGooglePlayStartAtLaunch");
 		Intent intent = new Intent(arg0.getActivity().getApplicationContext(), SignInActivity.class);
 		intent.putExtra("shouldStartSignInFlow", false);
+		int maxAutoSignInAttempts = 3;
+		try {
+			maxAutoSignInAttempts = arg1[0].getAsInt();
+		} catch (Exception e) {}
+		intent.putExtra("maxAutoSignInAttempts", maxAutoSignInAttempts);
+
 		arg0.getActivity().startActivity(intent);
-		
+
 		return null;
 	}
 
