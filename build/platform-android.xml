@@ -1,11 +1,11 @@
-<platform xmlns="http://ns.adobe.com/air/extension/15.0"> 
+<platform xmlns="http://ns.adobe.com/air/extension/18.0"> 
     <packagedDependencies>
         <packagedDependency>google-play-services.jar</packagedDependency>
-    </packagedDependencies> 
+    </packagedDependencies>
     <packagedResources>
         <packagedResource>
-            <packageName>com.google.android.gms</packageName> 
-            <folderName>google-play-services-res</folderName> 
+            <packageName>com.google.android.gms</packageName>
+            <folderName>google-play-services-res</folderName>
         </packagedResource>
     </packagedResources>
 </platform>
