@@ -16,7 +16,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////-->
 
-<extension xmlns="http://ns.adobe.com/air/extension/18.0">
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
     <id>com.freshplanet.AirGooglePlayGamesServices</id>
     <versionNumber>1.0</versionNumber>
     <platforms>
@@ -25,6 +25,14 @@
         </platform>
 
         <platform name="Android-ARM"> 
+            <applicationDeployment>
+                <nativeLibrary>libAirGooglePlayGamesServices.jar</nativeLibrary>
+                <initializer>com.freshplanet.googleplaygames.Extension</initializer>
+                <finalizer>com.freshplanet.googleplaygames.Extension</finalizer>
+            </applicationDeployment>
+        </platform>
+
+        <platform name="Android-x86">
             <applicationDeployment>
                 <nativeLibrary>libAirGooglePlayGamesServices.jar</nativeLibrary>
                 <initializer>com.freshplanet.googleplaygames.Extension</initializer>
