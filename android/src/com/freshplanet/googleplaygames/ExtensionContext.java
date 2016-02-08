@@ -26,6 +26,7 @@ import com.adobe.fre.FREFunction;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetActivePlayerName;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetActivePlayerId;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetLeaderboardFunction;
+import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetPlayerStatsFunction;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesReportAchievementFunction;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesReportScoreFunction;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesShowAchievementsFunction;
@@ -33,12 +34,17 @@ import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesSignInFunctio
 import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesSignOutFunction;
 import com.freshplanet.googleplaygames.functions.AirGooglePlayStartAtLaunch;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.Player;
 import com.google.android.gms.games.leaderboard.LeaderboardScore;
 import com.google.android.gms.games.leaderboard.LeaderboardScoreBuffer;
 import com.google.android.gms.games.leaderboard.LeaderboardVariant;
 
+import com.google.android.gms.games.stats.PlayerStats;
+import com.google.android.gms.games.stats.Stats;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +78,7 @@ public class ExtensionContext extends FREContext implements GameHelper.GameHelpe
 		functionMap.put("getActivePlayerName", new AirGooglePlayGamesGetActivePlayerName());
 		functionMap.put("getActivePlayerId", new AirGooglePlayGamesGetActivePlayerId());
         functionMap.put("getLeaderboard", new AirGooglePlayGamesGetLeaderboardFunction());
+        functionMap.put("getPlayerStats", new AirGooglePlayGamesGetPlayerStatsFunction());
 		return functionMap;
 	}
 	
@@ -201,6 +208,45 @@ public class ExtensionContext extends FREContext implements GameHelper.GameHelpe
         return jsonScores.toString();
 
     }
+
+	public void getPlayerStats() {
+		PendingResult<Stats.LoadPlayerStatsResult> result =
+				Games.Stats.loadPlayerStats(getApiClient(), false /* forceReload */);
+		result.setResultCallback(new ResultCallback<Stats.LoadPlayerStatsResult>() {
+			public void onResult(Stats.LoadPlayerStatsResult result) {
+				Status status = result.getStatus();
+				if (status.isSuccess()) {
+					PlayerStats stats = result.getPlayerStats();
+					if (stats != null) {
+						logEvent("Player stats loaded");
+						onPlayerStatsLoaded(stats);
+					}
+				} else {
+					logEvent("Failed to fetch Stats Data status: "
+							+ status.getStatusMessage());
+				}
+			}
+		});
+	}
+
+	public void onPlayerStatsLoaded( PlayerStats stats ) {
+		dispatchEvent("ON_PLAYER_STATS", playerStatsToJsonString(stats));
+	}
+
+	private String playerStatsToJsonString( PlayerStats stats ) {
+		JSONObject jsonStats = new JSONObject();
+		try {
+			jsonStats.put("averageSessionLength", stats.getAverageSessionLength());
+			jsonStats.put("churnProbability", stats.getChurnProbability());
+			jsonStats.put("daysSinceLastPlayed", stats.getDaysSinceLastPlayed());
+			jsonStats.put("numberOfPurchases", stats.getNumberOfPurchases());
+			jsonStats.put("numberOfSessions", stats.getNumberOfSessions());
+			jsonStats.put("sessionPercentile", stats.getSessionPercentile());
+			jsonStats.put("spendPercentile", stats.getSpendPercentile());
+			jsonStats.put("spendProbability", stats.getSpendProbability());
+		} catch( JSONException e ) {}
+		return jsonStats.toString();
+	}
 
 	@Override
 	public void onSignInFailed() {

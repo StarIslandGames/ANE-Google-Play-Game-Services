@@ -137,6 +137,13 @@ package com.freshplanet.ane.AirGooglePlayGames
 				_context.call("getLeaderboard", leaderboardId );
 		}
 
+		public function requestPlayerStats():void
+		{
+			if (AirGooglePlayGames.isSupported) {
+				_context.call("getPlayerStats");
+			}
+		}
+
 
 		// --------------------------------------------------------------------------------------//
 		//																						 //
@@ -174,6 +181,12 @@ package com.freshplanet.ane.AirGooglePlayGames
 			} else if (event.code == "ON_LEADERBOARD_FAILED")
 			{
 				e = new Event(AirGooglePlayGamesLeaderboardEvent.LEADERBOARD_LOADING_FAILED );
+			} else if (event.code == "ON_PLAYER_STATS")
+			{
+				e = new AirGooglePlayGamesPlayerStatsEvent(
+					AirGooglePlayGamesPlayerStatsEvent.PLAYER_STATS_LOADED,
+					GSPlayerStats.fromJSONObject(JSON.parse(event.level) as Object)
+				);
 			}
 
 			if (e) {
