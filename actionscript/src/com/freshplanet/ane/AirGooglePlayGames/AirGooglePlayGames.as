@@ -144,6 +144,12 @@ package com.freshplanet.ane.AirGooglePlayGames
 			}
 		}
 
+		public function reportEvent( eventId:String, incrementAmount:int ):void
+		{
+			if (AirGooglePlayGames.isSupported) {
+				_context.call("reportEvent", eventId, incrementAmount);
+			}
+		}
 
 		// --------------------------------------------------------------------------------------//
 		//																						 //

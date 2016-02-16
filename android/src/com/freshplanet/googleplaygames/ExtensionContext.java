@@ -23,16 +23,7 @@ import android.util.Log;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetActivePlayerName;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetActivePlayerId;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetLeaderboardFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesGetPlayerStatsFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesReportAchievementFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesReportScoreFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesShowAchievementsFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesSignInFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayGamesSignOutFunction;
-import com.freshplanet.googleplaygames.functions.AirGooglePlayStartAtLaunch;
+import com.freshplanet.googleplaygames.functions.*;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -79,6 +70,7 @@ public class ExtensionContext extends FREContext implements GameHelper.GameHelpe
 		functionMap.put("getActivePlayerId", new AirGooglePlayGamesGetActivePlayerId());
         functionMap.put("getLeaderboard", new AirGooglePlayGamesGetLeaderboardFunction());
         functionMap.put("getPlayerStats", new AirGooglePlayGamesGetPlayerStatsFunction());
+        functionMap.put("reportEvent", new AirGooglePlayGamesReportEvent());
 		return functionMap;
 	}
 	
@@ -246,6 +238,10 @@ public class ExtensionContext extends FREContext implements GameHelper.GameHelpe
 			jsonStats.put("spendProbability", stats.getSpendProbability());
 		} catch( JSONException e ) {}
 		return jsonStats.toString();
+	}
+
+	public void reportEvent(String eventId, int amount) {
+		Games.Events.increment(getApiClient(), eventId, amount);
 	}
 
 	@Override
